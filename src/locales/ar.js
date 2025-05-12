@@ -36,28 +36,35 @@ export default {
 
 
 
- 
- 
-  },    
-  role:{
-    manage_Roles:"إدارة الأدوار",
-    iD:"الفهرس",
-    name:"الاسم",
-    role_Permissions_Manager:"مدير أذونات الأدوار",
-    role_Name :"اسم الدور",
-    enter_role_name:"أدخل اسم الدور",
-    loading_permissions:"جاري تحميل الأذونات...",
-    create_Role_with_Selected_Permissions:"إنشاء دور بالأذونات المحددة",
-    permission_Description:"وصف الإذن",
-    role_Name:"اسم الدور",
-    role_Permissions:"أذونات الدور",
-    edit:"تعديل",
-    click_or_drag_to_change_image:"انقر أو اسحب لتغيير الصورة",
-    close:"اغلق"
 
-     
+
   },
-     
+"role": {
+    "managementTitle": "إدارة الأدوار",
+    "search": "بحث في الأدوار...",
+    "export": "تصدير",
+    "new": "دور جديد",
+    "id": "المعرف",
+    "nameEn": "الاسم بالإنجليزية",
+    "nameAr": "الاسم بالعربية",
+    "translatedName": "الاسم المترجم",
+    "noData": "لا توجد أدوار",
+    "loadError": "فشل تحميل الأدوار",
+    "deleteConfirmTitle": "تأكيد الحذف",
+    "deleteConfirmMessage": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
+    "deleteSuccess": "تم حذف الدور بنجاح",
+    "deleteError": "فشل حذف الدور"
+  },
+  "actions": "الإجراءات",
+  "success": "نجاح",
+  "error": "خطأ",
+  "no": "لا",
+  "yes": "نعم",
+  "edit": "تعديل",
+  "delete": "حذف",
+  "show": "عرض",
+  "to": "إلى",
+  "from": "من",
   permission:{
     permissions_Management:"إدارة الأذونات",
     view_and_manage_all_system_permissions_grouped_by_modules:"عرض وإدارة جميع أذونات النظام المجمعة حسب الوحدات النمطية",
@@ -115,6 +122,6 @@ export default {
     click_or_drag_to_change_image:"انقر أو اسحب لتغيير الصورة",
     update_Model:"تحديث النموذج",
 
-  
+
   }
 };

@@ -1,190 +1,106 @@
 <script setup>
-import { FilterMatchMode } from 'primevue/api'
-import { ref, onMounted, onBeforeMount, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import axios from "axios"
-import { useRouter } from "vue-router"
 
 const router = useRouter()
 const toast = useToast()
+const { t } = useI18n()
 
-// Data and UI states
+// State variables
 const loading = ref(true)
-const user = ref({
-  name: '',
-  permissions: []
-})
-const users = ref([])
 const roles = ref([])
-const updateDialog = ref(false)
-const productDialog = ref(false)
 const deleteDialog = ref(false)
-const deleteProductsDialog = ref(false)
-const product = ref({})
-const selectedProducts = ref(null)
+const deleteId = ref(null)
 const dt = ref(null)
 const filters = ref({})
-const submitted = ref(false)
-const delete_id = ref(Number)
 const searchQuery = ref('')
+const selectedRoles = ref(null)
 
 // Pagination variables
 const currentPage = ref(1)
 const totalRecords = ref(0)
 const rowsPerPage = ref(10)
 const totalPages = ref(0)
-const firstPageUrl = ref('')
-const lastPageUrl = ref('')
-const nextPageUrl = ref('')
-const prevPageUrl = ref('')
-const from = ref(0)
-const to = ref(0)
-const links = ref([])
 
-// Initialize filters
-const initFilters = () => {
-  filters.value = {
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-  }
-}
-
-// Fetch roles data with pagination
+// Fetch data
 const fetchData = () => {
   loading.value = true
-  axios.get("/api/role", {
+  axios.get('/api/role', {
     params: {
       page: currentPage.value,
-      limit: rowsPerPage.value,
-      search: searchQuery.value
+      per_page: rowsPerPage.value,
+      search: searchQuery.value || undefined
     }
-  }).then((res) => {
-    loading.value = false
-    roles.value = res.data.data.data
-    totalRecords.value = res.data.data.total
-    totalPages.value = res.data.data.last_page
-    firstPageUrl.value = res.data.data.first_page_url
-    lastPageUrl.value = res.data.data.last_page_url
-    nextPageUrl.value = res.data.data.next_page_url
-    prevPageUrl.value = res.data.data.prev_page_url
-    from.value = res.data.data.from
-    to.value = res.data.data.to
-    links.value = res.data.data.links
-  }).catch(error => {
-    loading.value = false
-    console.error("Error fetching roles:", error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load roles',
-      life: 3000
+  })
+    .then((response) => {
+      roles.value = response.data.data.data
+      totalRecords.value = response.data.data.total
+      totalPages.value = response.data.data.last_page
+      loading.value = false
     })
-  })
-
-  // Fetch permissions separately
-  axios.get("/api/role/get/permissions").then((res) => {
-    users.value = res.data.permissions
-  }).catch(error => {
-    console.error("Error fetching permissions:", error)
-  })
+    .catch((error) => {
+      toast.add({
+        severity: 'error',
+        summary: t('error'),
+        detail: t('role.loadError'),
+        life: 3000
+      })
+      loading.value = false
+      console.error('Error fetching roles:', error)
+    })
 }
 
-// Pagination functions
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-    fetchData()
-  }
-}
-
-const changeRowsPerPage = (rows) => {
-  rowsPerPage.value = rows.value
-  currentPage.value = 1
-  fetchData()
-}
-
-// Search watcher
-watch(searchQuery, (newVal) => {
-  currentPage.value = 1
+// Watch for pagination changes
+watch([currentPage, rowsPerPage, searchQuery], () => {
   fetchData()
 })
 
-// CRUD operations
-const openNew = () => {
-  router.push({ name: 'roles-create' })
-}
-
-const hideDialog = () => {
-  productDialog.value = false
-  updateDialog.value = false
-  submitted.value = false
-}
-
-const save = () => {
-  submitted.value = true
-  axios.post('api/roles/create', user.value)
-    .then((res) => {
-      fetchData()
-      productDialog.value = false
-      toast.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Role Created',
-        life: 3000
-      })
-      user.value = { name: '', permissions: [] }
-    })
-    .catch((error) => {
-      console.error("Error creating role:", error)
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to create role',
-        life: 3000
-      })
-    })
-}
-
-const edit = (id) => {
-  router.push({ name: 'roles-update', params: { id: id } })
-}
-
+// Delete role
 const confirmDelete = (id) => {
-  delete_id.value = id
-  deleteProductsDialog.value = true
+  deleteId.value = id
+  deleteDialog.value = true
 }
 
-const deleteSelectedProducts = () => {
-  axios.delete(`api/role/${delete_id.value}`)
+const deleteRole = () => {
+  axios.delete(`/api/role/${deleteId.value}`)
     .then(() => {
-      fetchData()
-      deleteProductsDialog.value = false
       toast.add({
         severity: 'success',
-        summary: 'Successful',
-        detail: 'Role Deleted',
+        summary: t('success'),
+        detail: t('role.deleteSuccess'),
         life: 3000
       })
+      fetchData()
+      deleteDialog.value = false
     })
     .catch((error) => {
-      console.error("Error deleting role:", error)
       toast.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to delete role',
+        summary: t('error'),
+        detail: t('role.deleteError'),
         life: 3000
       })
     })
 }
 
+// Export CSV
 const exportCSV = () => {
   dt.value.exportCSV()
 }
 
-// Initialize component
-onBeforeMount(() => {
-  initFilters()
-})
+// Navigation functions
+const createNewRole = () => {
+  router.push({ name: 'role-create' })
+}
 
+const editRole = (id) => {
+  router.push({ name: 'role-edit', params: { id } })
+}
+
+// Lifecycle hooks
 onMounted(() => {
   fetchData()
 })
@@ -193,34 +109,30 @@ onMounted(() => {
 <template>
   <div class="grid">
     <div class="col-12">
-      <va-card class="card">
+      <div class="card p-4 shadow-2 border-round">
         <Toolbar class="mb-4">
           <template #start>
-            <div class="my-2">
-              <Button
-              v-can="'create roles'"
-                :label='$t("user.new")'
-                icon="pi pi-plus"
-                class="new mr-2"
-                @click="openNew"
-              />
-            </div>
+            <h2 class="text-2xl font-bold">{{ t('role.managementTitle') }}</h2>
           </template>
 
           <template #end>
-            <div  v-can="'list roles'" class="my-2 flex gap-2">
+            <div class="flex gap-2">
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
-                <InputText
-                  v-model="searchQuery"
-                  :placeholder='$t("user.search")'
-                />
+                <InputText v-model="searchQuery" :placeholder="t('role.search')" />
               </span>
               <Button
-                :label='$t("user.export")'
+                :label="t('role.export')"
                 icon="pi pi-upload"
-                class="new"
-                @click="exportCSV($event)"
+                class="p-export"
+                @click="exportCSV"
+              />
+              <Button
+                v-can="'create roles'"
+                :label="t('role.new')"
+                icon="pi pi-plus"
+                class="p-button-success"
+                @click="createNewRole"
               />
             </div>
           </template>
@@ -228,320 +140,142 @@ onMounted(() => {
 
         <Toast />
 
-        <DataTable
-          ref="dt"
-          v-model:selection="selectedProducts"
-          :value="roles"
-          :loading="loading"
-          data-key="id"
-          :paginator="false"
-          :rows="rowsPerPage"
-          :filters="filters"
-          responsive-layout="scroll"
-           v-can="'list roles'"
-        >
-          <template #header>
-            <div class="flex flex-column md:flex-row md:justify-between md:align-items-center">
-              <h5 class="m-0">{{$t("role.manage_Roles")}}</h5>
-            </div>
-          </template>
-
-          <Column selection-mode="multiple" header-style="width: 3rem"></Column>
-
-          <Column
-            field="id"
-            :header='$t("role.iD")'
-            :sortable="true"
-            header-style="width:14%; min-width:5rem;"
+        <div class="card shadow-1 surface-0">
+          <DataTable
+            ref="dt"
+            :value="roles"
+            :loading="loading"
+            data-key="id"
+            :paginator="true"
+            :rows="rowsPerPage"
+            :filters="filters"
+            :totalRecords="totalRecords"
+            paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            :rows-per-page-options="[5, 10, 20, 30]"
+            :current-page-report-template="`${t('show')} {first} ${t('to')} {last} ${t('from')} {totalRecords}`"
+            responsive-layout="scroll"
+            stripedRows
+            showGridlines
+            class="p-datatable-sm"
+            v-can="'list roles'"
           >
-            <template #body="slotProps">
-              {{ slotProps.data.id }}
-            </template>
-          </Column>
+            <Column selection-mode="multiple" header-style="width: 3rem"></Column>
 
-          <Column
-            field="name"
-            :header='$t("role.name")'
-            :sortable="true"
-            header-style="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              {{ slotProps.data.name }}
-            </template>
-          </Column>
-
-          <Column header-style="min-width:17rem;">
-            <template #body="slotProps">
-              <Button
-              v-can="'edit roles'"
-                icon="pi pi-pencil"
-                class="p-button-rounded p-button-success mr-2"
-                @click="edit(slotProps.data.id)"
-              />
-              <Button
-              v-can="'delete roles'"
-                icon="pi pi-trash"
-                class="delete mt-2"
-                @click="confirmDelete(slotProps.data.id)"
-              />
-            </template>
-          </Column>
-        </DataTable>
-
-        <!-- Custom Pagination -->
-        <div class="p-paginator p-component p-unselectable-text mt-3">
-          <div class="p-paginator-left-content">
-            <span class="p-paginator-current">
-              Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
-            </span>
-          </div>
-          <div class="p-paginator-right-content">
-            <span class="p-paginator-pages">
-              <button
-                class="p-paginator-first p-paginator-element p-link"
-                :disabled="currentPage === 1"
-                @click="goToPage(1)"
-              >
-                <span class="p-paginator-icon pi pi-angle-double-left"></span>
-              </button>
-              <button
-                class="p-paginator-prev p-paginator-element p-link"
-                :disabled="!prevPageUrl"
-                @click="goToPage(currentPage - 1)"
-              >
-                <span class="p-paginator-icon pi pi-angle-left"></span>
-              </button>
-
-              <template v-for="(link, index) in links" :key="index">
-                <button
-                  v-if="link.label && !isNaN(link.label)"
-                  class="p-paginator-page p-paginator-element p-link"
-                  :class="{ 'p-highlight': link.active }"
-                  @click="goToPage(parseInt(link.label))"
-                >
-                  {{ link.label }}
-                </button>
-                <span v-else-if="link.label === '...'" class="p-paginator-dots">...</span>
+            <Column field="id" :header="t('role.id')" :sortable="true">
+              <template #body="slotProps">
+                {{ slotProps.data.id }}
               </template>
+            </Column>
 
-              <button
-                class="p-paginator-next p-paginator-element p-link"
-                :disabled="!nextPageUrl"
-                @click="goToPage(currentPage + 1)"
-              >
-                <span class="p-paginator-icon pi pi-angle-right"></span>
-              </button>
-              <button
-                class="p-paginator-last p-paginator-element p-link"
-                :disabled="currentPage === totalPages"
-                @click="goToPage(totalPages)"
-              >
-                <span class="p-paginator-icon pi pi-angle-double-right"></span>
-              </button>
-            </span>
+            <Column field="name_en" :header="t('role.nameEn')" :sortable="true">
+              <template #body="slotProps">
+                {{ slotProps.data.name_en }}
+              </template>
+            </Column>
 
-            <span class="p-paginator-rpp-options">
-              <Dropdown
-                v-model="rowsPerPage"
-                :options="[5, 10, 20, 30]"
-                @change="changeRowsPerPage"
-                class="ml-2"
-                style="width: 100px"
-              />
-            </span>
-          </div>
+            <Column field="name_ar" :header="t('role.nameAr')" :sortable="true">
+              <template #body="slotProps">
+                {{ slotProps.data.name_ar }}
+              </template>
+            </Column>
+
+            <Column field="translated_name" :header="t('role.translatedName')" :sortable="true">
+              <template #body="slotProps">
+                {{ slotProps.data.translated_name }}
+              </template>
+            </Column>
+
+            <Column :header="t('actions')" headerStyle="width: 12rem">
+              <template #body="slotProps">
+                <Button
+                  v-can="'edit roles'"
+                  icon="pi pi-pencil"
+                  class=" p-detail mr-2"
+                  @click="editRole(slotProps.data.id)"
+                  v-tooltip.top="t('edit')"
+                />
+                <Button
+                  v-can="'delete roles'"
+                  icon="pi pi-trash"
+                   class="p-delete mx-2"
+                  @click="confirmDelete(slotProps.data.id)"
+                  v-tooltip.top="t('delete')"
+                />
+              </template>
+            </Column>
+
+            <template #empty>
+              <div class="text-center py-4">
+                <i class="pi pi-exclamation-circle text-2xl mb-2" />
+                <p class="text-xl">{{ t('role.noData') }}</p>
+              </div>
+            </template>
+
+            <template #loading>
+              <div class="flex justify-content-center align-items-center py-4">
+                <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="4" />
+              </div>
+            </template>
+          </DataTable>
         </div>
 
         <!-- Delete Confirmation Dialog -->
         <Dialog
-          v-model:visible="deleteProductsDialog"
+          v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
-          header="Confirm"
+          :header="t('role.deleteConfirmTitle')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-            <span>Are you sure you want to delete this role?</span>
+            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem; color: var(--red-500)" />
+            <span>{{ t('role.deleteConfirmMessage') }}</span>
           </div>
           <template #footer>
             <Button
-              label="No"
+              :label="t('no')"
               icon="pi pi-times"
               class="p-button-text"
-              @click="deleteProductsDialog = false"
+              @click="deleteDialog = false"
             />
             <Button
-              label="Yes"
+              :label="t('yes')"
               icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteSelectedProducts"
+              class="p-button-text p-button-danger"
+              @click="deleteRole"
             />
           </template>
         </Dialog>
-
-        <!-- Create Role Dialog -->
-        <Dialog
-          v-model:visible="productDialog"
-          :style="{ width: '450px' }"
-          header="Create Role"
-          :modal="true"
-          class="p-fluid"
-        >
-          <div class="field mb-5">
-            <label for="name">Name</label>
-            <InputText
-              class="mt-3 w-full"
-              id="name"
-              v-model.trim="user.name"
-              required="true"
-              autofocus
-            />
-          </div>
-          <div class="card flex justify-content-center">
-            <MultiSelect
-              v-model="user.permissions"
-              display="chip"
-              option-value="id"
-              :options="users"
-              optionLabel="name"
-              placeholder="Select Permissions"
-              class="w-full md:w-20rem"
-            />
-          </div>
-
-          <template #footer>
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="hideDialog"
-            />
-            <Button
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="save"
-            />
-          </template>
-        </Dialog>
-
-        <!-- Update Role Dialog -->
-        <Dialog
-          v-model:visible="updateDialog"
-          :style="{ width: '450px' }"
-          header="Update Role"
-          :modal="true"
-        >
-          <div class="field mb-5">
-            <label for="name">Name</label>
-            <InputText
-              class="mt-3 w-full"
-              id="name"
-              v-model.trim="user.name"
-              required="true"
-              autofocus
-            />
-          </div>
-          <div class="card flex justify-content-center">
-            <MultiSelect
-              v-model="user.permissions"
-              option-value="id"
-              :options="users"
-              optionLabel="name"
-              placeholder="Select Permissions"
-              class="w-full md:w-20rem"
-            />
-          </div>
-
-          <template #footer>
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="hideDialog"
-            />
-            <Button
-              label="Update"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="update"
-            />
-          </template>
-        </Dialog>
-      </va-card>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.new {
-  background: #3b82f6;
-  border: none;
-  color: white;
+/* Custom styles for better table display */
+:deep(.p-datatable) {
+  font-size: 0.9rem;
 }
 
-.delete {
-  background: #ef4444;
-  border: none;
-  color: white;
+:deep(.p-datatable .p-datatable-thead > tr > th) {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
 }
 
-.p-paginator {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem;
-  background: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 3px;
+:deep(.p-datatable .p-datatable-tbody > tr) {
+  transition: background-color 0.2s;
+}
 
-  .p-paginator-left-content {
-    color: #6c757d;
-  }
+:deep(.p-datatable .p-datatable-tbody > tr:hover) {
+  background-color: var(--hoverColor);
+}
 
-  .p-paginator-right-content {
-    display: flex;
-    align-items: center;
-
-    .p-paginator-pages {
-      display: flex;
-      margin: 0 0.5rem;
-
-      button {
-        text-align: center;
-        min-width: 2.357rem;
-        height: 2.357rem;
-        margin: 0.143rem;
-        border: 0 none;
-        color: #6c757d;
-        background: transparent;
-        border-radius: 50%;
-        transition: background-color 0.2s;
-
-        &:hover {
-          background: #e9ecef;
-        }
-
-        &.p-highlight {
-          color: #ffffff;
-          background: #E28C3F;
-        }
-
-        &:disabled {
-          opacity: 0.5;
-          cursor: default;
-        }
-      }
-    }
-
-    .p-paginator-dots {
-      min-width: 2.357rem;
-      height: 2.357rem;
-      margin: 0.143rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+/* Responsive adjustments */
+@media screen and (max-width: 960px) {
+  :deep(.p-datatable) {
+    overflow-x: auto;
+    display: block;
   }
 }
 </style>

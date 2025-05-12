@@ -1,10 +1,10 @@
 import axios from 'axios'
+import router from '@/router'
 
-axios.defaults.withCredentials = true
 axios.defaults.baseURL = import.meta.env.VITE_URI
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
-axios.defaults.headers.common['local'] = localStorage.getItem('appLang')
+axios.defaults.headers.common['Accept-Language'] = localStorage.getItem('appLang')
 
 axios.interceptors.request.use((config) => {
   try {
@@ -13,6 +13,20 @@ axios.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
   }
   config.headers.Accept = 'application/json'
+
   config.headers["Content-Type"] = "application/json";
+
   return config
 })
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token')
+      router.push({ name: 'login' })
+    }
+    return Promise.reject(error)
+  }
+)
+
+export default axios

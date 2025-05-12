@@ -42,15 +42,32 @@ pre {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.p-paginator{
+  direction: ltr !important;
+}
 .p-button,
 .p-button.p-button-success {
-  background-color: #E28C3F !important;
-  border-color: #E28C3F !important;
+  background-color: #013531 !important;
+  border-color: #013531 !important;
   color: #fff;
 }
-
+.p-export{
+  background-color: #0b3baa !important;
+  border-color: #0b3baa !important;
+  color: #fff;
+}
+.p-detail{
+  background-color: #fbfefe !important;
+  color: green !important;
+  border: 0px !important;
+}
+.p-delete{
+  background-color: #fbfefe !important;
+  color: red !important;
+  border: 0px !important;
+}
 .va-sidebar__menu{
-  background-color: #f8f4ec !important;
+  background-color: #f0f1f1 !important;
 
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -94,8 +111,8 @@ pre {
 }
 .new {
 
-  background-color: #E28C3F !important;
-  border-color: #E28C3F !important;
+  background-color: #013531 !important;
+  border-color: #013531 !important;
 }
 .p-rating .p-rating-item .p-rating-icon {
   color: rgb(166, 166, 0) !important;

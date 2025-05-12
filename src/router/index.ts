@@ -13,16 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: { name: 'dashboard' },
   },
 
-  {
-    name: 'invioce',
-    path: '/invioce/:id',
-    component: () => import('../pages/admin/settings/order/invioce.vue'),
-  },
-  {
-    name: 'home',
-    path: '/',
-    component: () => import('../pages/admin/frontend/pages/home.vue'),
-  },
+
   {
     name: 'admin',
     path: '/admin',

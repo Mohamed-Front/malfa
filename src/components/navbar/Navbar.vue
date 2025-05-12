@@ -46,7 +46,7 @@
     box-shadow: var(--va-box-shadow);
     z-index: 2;
 
-    background-color:#f8f4ec !important;
+    background-color:#f0f1f1 !important;
 
     @media screen and (max-width: 950px) {
       .left {

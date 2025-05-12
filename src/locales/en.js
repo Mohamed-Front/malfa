@@ -31,34 +31,42 @@ export default {
      update_User:"Update User",
      click_or_drag_to_change_photo:"Click or drag to change photo",
 
-    
-  },
-  role:{
-    
-    manage_Roles:"Manage Roles",
-    iD:"ID",
-    name:"Name",
-    role_Permissions_Manager:"Role Permissions Manager",
-    role_Name :"Role Name ",
-    enter_role_name:"Enter role name",
-    loading_permissions:"Loading permissions...",
-    create_Role_with_Selected_Permissions:"Create Role with Selected Permissions",
-    permission_Description:"Permission Description",
-    role_Name:" Role Name",
-    role_Permissions:"Role Permissions",
-    edit:"Edit",
-    click_or_drag_to_change_image:"Click or drag to change image",
-    close:"Close",
 
   },
-  
+"role": {
+    "managementTitle": "إدارة الأدوار",
+    "search": "بحث في الأدوار...",
+    "export": "تصدير",
+    "new": "دور جديد",
+    "id": "المعرف",
+    "nameEn": "الاسم بالإنجليزية",
+    "nameAr": "الاسم بالعربية",
+    "translatedName": "الاسم المترجم",
+    "noData": "لا توجد أدوار",
+    "loadError": "فشل تحميل الأدوار",
+    "deleteConfirmTitle": "تأكيد الحذف",
+    "deleteConfirmMessage": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
+    "deleteSuccess": "تم حذف الدور بنجاح",
+    "deleteError": "فشل حذف الدور"
+  },
+  "actions": "الإجراءات",
+  "success": "نجاح",
+  "error": "خطأ",
+  "no": "لا",
+  "yes": "نعم",
+  "edit": "تعديل",
+  "delete": "حذف",
+  "show": "عرض",
+  "to": "إلى",
+  "from": "من",
+
 permission:{
   permissions_Management:"Permissions Management",
   view_and_manage_all_system_permissions_grouped_by_modules:"View and manage all system permissions grouped by modules",
   refresh:"Refresh",
   no_permissions_found_in_this_group:"No permissions found in this group",
   permission_Name:"Permission Name",
- 
+
 
 },
 brand:{

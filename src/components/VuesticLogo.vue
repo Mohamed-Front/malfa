@@ -1,5 +1,5 @@
 <template>
- <img src="../assets/shiftlogo.png" class="w-[51px] mx-3 h-[30px]" >
+ <img src="../assets/logo.png" class="w-[90px] mx-3 h-[40px]" >
 </template>
 
 <script setup lang="ts">
