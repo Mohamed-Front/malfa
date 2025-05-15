@@ -7,6 +7,8 @@ export default {
   roles:"Roles",
   dashboard:"Dashboard",
   products:"Products",
+  delete:"delete",
+  edit:"edit",
   user: {
     users:"Users",
     new:"New",

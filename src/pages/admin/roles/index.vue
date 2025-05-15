@@ -185,7 +185,7 @@ onMounted(() => {
               </template>
             </Column>
 
-            <Column :header="t('actions')" headerStyle="width: 12rem">
+            <Column :header="t('permissions.columns.actions')" headerStyle="width: 12rem">
               <template #body="slotProps">
                 <Button
                   v-can="'edit roles'"
@@ -199,7 +199,7 @@ onMounted(() => {
                   icon="pi pi-trash"
                    class="p-delete mx-2"
                   @click="confirmDelete(slotProps.data.id)"
-                  v-tooltip.top="t('delete')"
+                  v-tooltip.top="$t('delete')"
                 />
               </template>
             </Column>

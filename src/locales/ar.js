@@ -7,6 +7,8 @@ export default {
   Permissions: "الأذونات",
   users_management:"إدارة المستخدمين",
   dashboard:"لوحة القيادة",
+  delete:"حذف",
+  edit:"تعديل",
   user: {
     new:"جديد",
     users:"المستخدمين",
