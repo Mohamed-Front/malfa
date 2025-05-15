@@ -35,7 +35,7 @@ export default {
   },
   "permissions": {
     "title": "Permissions Management",
-    "subtitle": "View and manage all system permissions grouped by modules",
+    "subtitle": "View and manage all system permissions grouped by modulessssss",
     "refresh": "Refresh",
     "columns": {
       "id": "ID",
