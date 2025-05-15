@@ -16,6 +16,7 @@ export const useAppLangStore = defineStore("appLangStore", {
   },
   actions: {
     setAppLang(locale) {
+      location.reload();
 
       this.appLang = locale;
       // axios.defaults.headers.common["lang"] = localStorage.getItem("appLang");
@@ -29,8 +30,6 @@ export const useAppLangStore = defineStore("appLangStore", {
       //   });
     },
     setAppRtl(isRtl) {
-      location.reload();
-
       this.isRtl = isRtl;
     },
   },
