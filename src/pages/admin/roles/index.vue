@@ -93,11 +93,11 @@ const exportCSV = () => {
 
 // Navigation functions
 const createNewRole = () => {
-  router.push({ name: 'role-create' })
+  router.push({ name: 'roles-create' })
 }
 
 const editRole = (id) => {
-  router.push({ name: 'role-edit', params: { id } })
+  router.push({ name: 'roles-update', params: { id } })
 }
 
 // Lifecycle hooks
@@ -107,7 +107,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="grid">
+  <div class="grid" :class="{'rtl': $i18n.locale === 'ar'}">
     <div class="col-12">
       <div class="card p-4 shadow-2 border-round">
         <Toolbar class="mb-4">
@@ -269,6 +269,35 @@ onMounted(() => {
 
 :deep(.p-datatable .p-datatable-tbody > tr:hover) {
   background-color: var(--hoverColor);
+}
+
+/* RTL Support */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .toolbar {
+  justify-content: flex-start;
+}
+
+.rtl .p-input-icon-left .pi {
+  right: 0.75rem;
+  left: auto;
+}
+
+.rtl .p-input-icon-left input {
+  padding-right: 2.5rem;
+  padding-left: 0.75rem;
+}
+
+.rtl .p-datatable .p-column-header-content {
+  justify-content: flex-end;
+}
+
+.rtl .p-button-icon-only {
+  margin-right: 0;
+  margin-left: 0.5rem;
 }
 
 /* Responsive adjustments */

@@ -6,7 +6,8 @@ const router = useRouter()
 const permissionsData = ref({});
 const loading = ref(true);
 const selectedPermissions = ref([]);
-const roleName = ref('');
+const name_en = ref('');
+const name_ar = ref('');
 const showDescriptionModal = ref(false);
 const currentDescription = ref('');
 
@@ -66,13 +67,14 @@ const showDescription = (description) => {
 };
 
 const submitSelectedPermissions = () => {
-  if (!roleName.value) {
+  if (!name_ar.value) {
     alert('Please enter a role name');
     return;
   }
 
   const payload = {
-    name: roleName.value,
+    name_ar: name_ar.value,
+    name_en: name_en.value,
     permissions: selectedPermissions.value
   };
 
@@ -95,26 +97,39 @@ onMounted(() => {
     <h1>{{$t("role.role_Permissions_Manager")}}</h1>
 
     <div class="controls">
-      <div class="name-input">
+
+<div class="name-input">
         <label for="roleName">
-      {{$t("role.role_Name")}}<span class="required">*</span>
+      {{$t("role.role_Name_ar")}}<span class="required">*</span>
         </label>
         <input
 
           type="text"
           id="roleName"
-          v-model="roleName"
-          :placeholder='$t("role.enter_role_name")'
+          v-model="name_ar"
+          :placeholder='$t("role.role_Name_ar")'
           required
         />
       </div>
+       <div class="name-input">
+        <label for="roleName">
+      {{$t("role.role_Name_en")}}<span class="required">*</span>
+        </label>
+        <input
 
-      <button
+          type="text"
+          id="roleName"
+          v-model="name_en"
+          :placeholder='$t("role.role_Name_en")'
+          required
+        />
+      </div>
+      <!-- <button
         @click="tableView = !tableView"
         class="view-toggle"
       >
         {{ tableView ? 'Switch to Card View' : 'Switch to Table View' }}
-      </button>
+      </button> -->
     </div>
 
     <div v-if="loading" class="loading">{{$t("role.loading_permissions")}}</div>
@@ -147,7 +162,7 @@ onMounted(() => {
                     {{ groupName.charAt(0).toUpperCase() + groupName.slice(1) }}
                   </label>
                 </td>
-                <td>{{ permission.name }}</td>
+                <td>{{ permission.translated_name }}</td>
                 <td>
                   <button
                     @click="showDescription(permission.description)"
@@ -200,7 +215,7 @@ onMounted(() => {
                     v-model="selectedPermissions"
                   />
                   <label :for="`permission-${permission.id}`">
-                    {{ permission.name }}
+                    {{ permission.translated_name }}
                   </label>
                 </div>
                 <button
@@ -208,7 +223,7 @@ onMounted(() => {
                   class="description-btn"
                   :disabled="!permission.description"
                 >
-                  {{ permission.description ? 'View Description' : 'No Description' }}
+                  {{ permission.description ? 'View Description' : $t('role.No_Description')}}
                 </button>
               </div>
             </div>
@@ -221,7 +236,7 @@ onMounted(() => {
     <button
       @click="submitSelectedPermissions"
       class="submit-btn"
-      :disabled="selectedPermissions.length === 0 || !roleName"
+      :disabled="selectedPermissions.length === 0 || !name_en || !name_ar"
     >
 {{$t("role.create_Role_with_Selected_Permissions")}}    </button>
 

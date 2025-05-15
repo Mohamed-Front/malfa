@@ -9,7 +9,8 @@ const permissionsData = ref({});
 const roleData = ref(null);
 const loading = ref(true);
 const selectedPermissions = ref([]);
-const roleName = ref('');
+const name_en = ref('');
+const name_ar = ref('');
 const showDescriptionModal = ref(false);
 const currentDescription = ref('');
 const tableView = ref(false);
@@ -29,7 +30,8 @@ const fetchPermissions = () => {
 const fetchRoleData = () => {
   axios.get(`api/role/${route.params.id}`).then((res) => {
     roleData.value = res.data.data;
-    roleName.value = roleData.value.name;
+    name_en.value = roleData.value.name_en;
+    name_ar.value = roleData.value.name_ar;
     selectedPermissions.value = roleData.value.permissions.map(p => p.id);
     loading.value = false;
   }).catch(() => {
@@ -74,13 +76,15 @@ const showDescription = (description) => {
 };
 
 const submitForm = () => {
-  if (!roleName.value) {
+  if (!name_en.value) {
     alert('Please enter a role name');
     return;
   }
 
   const payload = {
-    name: roleName.value,
+
+    name_en: name_en.value,
+    name_ar: name_ar.value,
     permissions: selectedPermissions.value
   };
 
@@ -99,34 +103,48 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-can="'edit roles'" class="permission-manager">
-    <h1>{{ isEditing ? $t('permissions.edit') : $t('permissions.create') }}</h1>
+  <div v-can="'create roles'" class="permission-manager">
+    <h1>{{$t("role.role_Permissions_Manager")}}</h1>
 
     <div class="controls">
-      <div class="name-input">
+
+<div class="name-input">
         <label for="roleName">
-         {{$t("role.role_Name")}} <span class="required">*</span>
+      {{$t("role.role_Name_ar")}}<span class="required">*</span>
         </label>
         <input
+
           type="text"
           id="roleName"
-          v-model="roleName"
-          :placeholder='$t("role.enter_role_name")'
+          v-model="name_ar"
+          :placeholder='$t("role.role_Name_ar")'
           required
         />
       </div>
+       <div class="name-input">
+        <label for="roleName">
+      {{$t("role.role_Name_en")}}<span class="required">*</span>
+        </label>
+        <input
 
-      <button
+          type="text"
+          id="roleName"
+          v-model="name_en"
+          :placeholder='$t("role.role_Name_en")'
+          required
+        />
+      </div>
+      <!-- <button
         @click="tableView = !tableView"
         class="view-toggle"
       >
         {{ tableView ? 'Switch to Card View' : 'Switch to Table View' }}
-      </button>
+      </button> -->
     </div>
 
-    <div v-if="loading" class="loading">
-  {{ isEditing ? $t('loading.roleData') : $t('loading.permissions') }}
-</div>    <template v-else>
+    <div v-if="loading" class="loading">{{$t("role.loading_permissions")}}</div>
+
+    <template v-else>
       <!-- Table View -->
       <div v-if="tableView" class="table-view">
         <table>
@@ -143,6 +161,7 @@ onMounted(() => {
               <tr v-for="permission in group" :key="permission.id">
                 <td v-if="group.indexOf(permission) === 0" :rowspan="group.length">
                   <input
+                   class="mx-2 my-auto"
                     type="checkbox"
                     :id="`group-${groupName}-table`"
                     :checked="isGroupSelected(groupName)"
@@ -153,7 +172,7 @@ onMounted(() => {
                     {{ groupName.charAt(0).toUpperCase() + groupName.slice(1) }}
                   </label>
                 </td>
-                <td>{{ permission.name }}</td>
+                <td>{{ permission.translated_name }}</td>
                 <td>
                   <button
                     @click="showDescription(permission.description)"
@@ -165,6 +184,7 @@ onMounted(() => {
                 </td>
                 <td>
                   <input
+                    class="mx-2 my-auto"
                     type="checkbox"
                     :id="`permission-${permission.id}-table`"
                     :value="permission.id"
@@ -205,7 +225,7 @@ onMounted(() => {
                     v-model="selectedPermissions"
                   />
                   <label :for="`permission-${permission.id}`">
-                    {{ permission.name }}
+                    {{ permission.translated_name }}
                   </label>
                 </div>
                 <button
@@ -213,7 +233,7 @@ onMounted(() => {
                   class="description-btn"
                   :disabled="!permission.description"
                 >
-                  {{ permission.description ? 'View Description' : 'No Description' }}
+                  {{ permission.description ? 'View Description' : $t('role.No_Description')}}
                 </button>
               </div>
             </div>
@@ -226,21 +246,21 @@ onMounted(() => {
     <button
       @click="submitForm"
       class="submit-btn"
-      :disabled="selectedPermissions.length === 0 || !roleName"
+      :disabled="selectedPermissions.length === 0 || !name_en || !name_ar"
     >
-    {{ isEditing ? $t('role.updateWithPermissions') : $t('role.createWithPermissions') }}
-  </button>
+{{$t("role.update_Role_with_Selected_Permissions")}}    </button>
 
     <!-- Description Modal -->
     <div v-if="showDescriptionModal" class="modal-overlay" @click.self="showDescriptionModal = false">
       <div class="modal-content">
-        <h3>Permission Description</h3>
+        <h3>{{$t("role.permission_Description")}}</h3>
         <p>{{ currentDescription }}</p>
         <button @click="showDescriptionModal = false" class="close-modal">Close</button>
       </div>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 /* (Keep all the same styles from previous implementation) */

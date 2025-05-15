@@ -46,47 +46,7 @@ export default {
         },
       ],
     },
-    {
-      name: 'products',
-      displayName: 'Products',
-      show:['list brands','list model'],
-      meta: {
-        icon: 'eye',
-      },
-      disabled: true,
-      children: [
-        {
-          name: 'brand',
-          displayName: 'brand',
-          show:'list brands'
-        },
-        {
-          name: 'model',
-          displayName: 'Model',
-          show:'list model'
-        },
 
-      ],
-    },
-
-
-    {
-      name: 'store',
-      displayName: 'store',
-      show:['list brands','list model'],
-      meta: {
-        icon: 'eye',
-      },
-      disabled: true,
-      children: [
-        {
-          name: 'stores',
-          displayName: 'Stores',
-          show:'list stores'
-        },
-
-      ],
-    },
 
 
 

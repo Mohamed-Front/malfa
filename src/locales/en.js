@@ -33,22 +33,80 @@ export default {
 
 
   },
-"role": {
-    "managementTitle": "إدارة الأدوار",
-    "search": "بحث في الأدوار...",
-    "export": "تصدير",
-    "new": "دور جديد",
-    "id": "المعرف",
-    "nameEn": "الاسم بالإنجليزية",
-    "nameAr": "الاسم بالعربية",
-    "translatedName": "الاسم المترجم",
-    "noData": "لا توجد أدوار",
-    "loadError": "فشل تحميل الأدوار",
-    "deleteConfirmTitle": "تأكيد الحذف",
-    "deleteConfirmMessage": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
-    "deleteSuccess": "تم حذف الدور بنجاح",
-    "deleteError": "فشل حذف الدور"
+  "permissions": {
+    "title": "Permissions Management",
+    "subtitle": "View and manage all system permissions grouped by modules",
+    "refresh": "Refresh",
+    "columns": {
+      "id": "ID",
+      "name": "Name",
+      "translated_name": "Arabic Name",
+      "description": "Description",
+      "actions": "Actions"
+    },
+    "no_description": "No description",
+    "no_translation": "No translation",
+    "dialog": {
+      "title": "Update Permission Details",
+      "name": "Permission Name",
+      "translated_name": "Arabic Name",
+      "description": "Description",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "empty": {
+      "message": "No permissions found in this group"
+    },
+    "modules": {
+      "dashboard": "Dashboard",
+      "permissions": "Permissions",
+      "users": "Users",
+      "roles": "Roles",
+      "addresses": "Addresses",
+      "countries": "Countries",
+      "features": "Features",
+      "landings": "Landing Pages",
+      "units": "Units",
+      "activities": "Activities",
+      "rooms": "Rooms",
+      "reviews": "Reviews",
+      "restaurants": "Restaurants",
+      "restaurant_tables": "Restaurant Tables"
+    }
   },
+ "role": {
+    "managementTitle": "Roles Management",
+    "search": "Search roles...",
+    "export": "Export",
+    "new": "New Role",
+    "id": "ID",
+    "nameEn": "Name (English)",
+    "nameAr": "Name (Arabic)",
+    "translatedName": "Translated Name",
+    "actions": "Actions",
+    "noData": "No roles found",
+    "deleteConfirmTitle": "Confirm Delete",
+    "deleteConfirmMessage": "Are you sure you want to delete this role?",
+    "deleteSuccess": "Role deleted successfully",
+    "deleteError": "Failed to delete role",
+    "loadError": "Failed to load roles",
+    role_Permissions_Manager:"role Permissions Manager",
+    role_Name_en:"Role Name in English",
+    role_Name_ar:"Role Name in arabic",
+    No_Description:"No Description",
+    create_Role_with_Selected_Permissions:"create Role with Selected Permissions",
+    update_Role_with_Selected_Permissions:"update Role with Selected Permissions"
+
+  },
+  "show": "Showing",
+  "to": "to",
+  "from": "of",
+  "edit": "Edit",
+  "delete": "Delete",
+  "yes": "Yes",
+  "no": "No",
+  "success": "Success",
+  "error": "Error",
   "actions": "الإجراءات",
   "success": "نجاح",
   "error": "خطأ",
@@ -60,15 +118,7 @@ export default {
   "to": "إلى",
   "from": "من",
 
-permission:{
-  permissions_Management:"Permissions Management",
-  view_and_manage_all_system_permissions_grouped_by_modules:"View and manage all system permissions grouped by modules",
-  refresh:"Refresh",
-  no_permissions_found_in_this_group:"No permissions found in this group",
-  permission_Name:"Permission Name",
 
-
-},
 brand:{
   new:"new",
   search:"Search...",

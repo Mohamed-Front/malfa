@@ -39,22 +39,64 @@ export default {
 
 
   },
-"role": {
+"permissions": {
+    "title": "إدارة الصلاحيات",
+    "subtitle": "عرض وإدارة جميع صلاحيات النظام مصنفة حسب الوحدات",
+    "refresh": "تحديث",
+    "columns": {
+      "id": "المعرف",
+      "name": "الاسم",
+      "translated_name": "الاسم العربي",
+      "description": "الوصف",
+      "actions": "الإجراءات"
+    },
+    "no_description": "لا يوجد وصف",
+    "no_translation": "لا يوجد ترجمة",
+    "dialog": {
+      "title": "تحديث تفاصيل الصلاحية",
+      "name": "اسم الصلاحية",
+      "translated_name": "الاسم العربي",
+      "description": "الوصف",
+      "cancel": "إلغاء",
+      "save": "حفظ"
+    },
+    "empty": {
+      "message": "لا توجد صلاحيات في هذه المجموعة"
+    },
+
+  },
+  "role": {
     "managementTitle": "إدارة الأدوار",
-    "search": "بحث في الأدوار...",
+    "search": "بحث الأدوار...",
     "export": "تصدير",
     "new": "دور جديد",
     "id": "المعرف",
-    "nameEn": "الاسم بالإنجليزية",
-    "nameAr": "الاسم بالعربية",
+    "nameEn": "الاسم (إنجليزي)",
+    "nameAr": "الاسم (عربي)",
     "translatedName": "الاسم المترجم",
+    "actions": "الإجراءات",
     "noData": "لا توجد أدوار",
-    "loadError": "فشل تحميل الأدوار",
     "deleteConfirmTitle": "تأكيد الحذف",
-    "deleteConfirmMessage": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
+    "deleteConfirmMessage": "هل أنت متأكد من رغبتك في حذف هذا الدور؟",
     "deleteSuccess": "تم حذف الدور بنجاح",
-    "deleteError": "فشل حذف الدور"
+    "deleteError": "فشل في حذف الدور",
+    "loadError": "فشل في تحميل الأدوار",
+    role_Permissions_Manager:"مدير أذونات الدور",
+   role_Name_en:"ادخل اسم الدور باللغة الانجليزية",
+    role_Name_ar:"ادخل اسم الدور باللغة العربية",
+    No_Description:"لا يوجد وصف",
+    create_Role_with_Selected_Permissions:"إنشاء دور مع أذونات محددة",
+    update_Role_with_Selected_Permissions:" تحديث دور مع أذونات محددة"
   },
+  "show": "عرض",
+  "to": "إلى",
+  "from": "من",
+  "edit": "تعديل",
+  "delete": "حذف",
+  "yes": "نعم",
+  "no": "لا",
+  "success": "نجاح",
+  "error": "خطأ",
   "actions": "الإجراءات",
   "success": "نجاح",
   "error": "خطأ",
@@ -65,16 +107,8 @@ export default {
   "show": "عرض",
   "to": "إلى",
   "from": "من",
-  permission:{
-    permissions_Management:"إدارة الأذونات",
-    view_and_manage_all_system_permissions_grouped_by_modules:"عرض وإدارة جميع أذونات النظام المجمعة حسب الوحدات النمطية",
-    refresh:"تحديث",
-    no_permissions_found_in_this_group:"لم يتم العثور على أذونات في هذه المجموعة",
-    permission_Name:"اسم الإذن",
-    click_or_drag_to_change_image:"انقر أو اسحب لتغيير الصورة",
 
-  }
-  ,
+
   brand:{
     new:"جديد",
     export:"تصدير",

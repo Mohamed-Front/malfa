@@ -70,7 +70,7 @@ const getoneRow=()=>{
     userData.value.email=res.data.data.email
     userData.value.type=res.data.data.type
     userData.value.phone=res.data.data.phone
-    userData.value.role_id=res.data.data.roles[0].id
+    userData.value.role_id=res.data.data?.roles[0].id
     imagePreview.value=res.data?.data?.media[0]?.url
 
 
@@ -181,7 +181,7 @@ onMounted(() => {
             id="role"
             v-model="userData.role_id"
             :options="roles"
-            optionLabel="name"
+            optionLabel="translated_name"
             optionValue="id"
             :placeholder='$t("user.select_role")'
             class="w-full border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -259,7 +259,7 @@ onMounted(() => {
 
 
 
-                      
+
                     </div>
                   </div>
                 </div>
