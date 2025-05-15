@@ -16,18 +16,21 @@ export const useAppLangStore = defineStore("appLangStore", {
   },
   actions: {
     setAppLang(locale) {
+
       this.appLang = locale;
       // axios.defaults.headers.common["lang"] = localStorage.getItem("appLang");
-      axios
-        .post("/api/set-language", { lang: locale })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      // axios
+      //   .post("/api/set-language", { lang: locale })
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
     setAppRtl(isRtl) {
+      location.reload();
+
       this.isRtl = isRtl;
     },
   },
